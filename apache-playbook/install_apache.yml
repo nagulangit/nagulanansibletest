@@ -1,0 +1,26 @@
+---
+- name: Install Apache Web Server
+  hosts: all
+  become: yes  # This ensures the playbook runs with elevated privileges (sudo)
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: Start and enable Apache2 service
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Ensure Apache is listening on port 80
+      ufw:
+        rule: allow
+        name: 'Apache'
+        port: '80'
+        proto: tcp
